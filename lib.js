@@ -37,9 +37,46 @@ function grossPerItemInState(state, startTime, endTime, customers) {
           // wizz: 600
           // bang: 300
 
-
         }
       }
+
+      function grossPerItemInSate (state, startTime, endTime, customers) {
+
+        return customers
+          .filter( custom => custom.state === state)
+          .reduce( flatMap(customer => customer.orders), [])
+          .filter( custom => custom.timeStamp >= startTime && custom.timeStamp <= entTime)
+          .reduce( flatMap(order => order.items), [])
+          .reduce( groupBy(0 , (a,b) =>a + b )( item => item.name , item => item.price ),{}) //item => item.name , item => item.price, 0 , (mapperAElement, mapperBElement) => mapperAElement + mapperBElement),{})
+      }
+
+
+          function groupBy(mapperA, mapperB, initV, typeFunc) {
+            return function doMap(toKey, toValue){
+            return function (sum, element) {
+              const key = toKey(element)
+              const value = toValue(element)
+
+              if(group[Key] === undefined)
+              {
+                group[Key] = initV
+              }
+              group[key] = combine(group[key], value)
+              return sum
+            }
+          }
+}
+
+          const flatMap = (mapper) =>
+            (sum, element) =>
+              [...sum,...mapper(element)]
+
+          module.exports = {
+            customer,
+            order,
+            item,
+            grossPerItemInState
+          }
 
 //reduce method returns some and next and executes that on a series of
 
@@ -54,7 +91,7 @@ function grossPerItemInState(state, startTime, endTime, customers) {
       //     return [...orders, ...mapper(element)]
       //   }
       // }
-//Original Code
+//
 // const mapCombine =
 //   combiner =>
 //     mapper =>
@@ -98,43 +135,13 @@ function grossPerItemInState(state, startTime, endTime, customers) {
 //   }
 
 
-function grossPerItemInSate (state, startTime, endTime, customers) {
 
-  return customers
-    .filter( custom => custom.state === state)
-    .reduce( flatMap(customer => customer.orders), [])
-    .filter( custom => custom.timeStamp >= startTime && custom.timeStamp <= entTime)
-    .reduce( flatMap(order => order.items), [])
-    .reduce( groupBy( item => item.name , item => item.price, 0 , (mapperAElement, mapperBElement) => mapperAElement + mapperBElement),{})
-}
+
     // const function itemName(item) {
     //   return item.name
     //}
 
-    function groupBy(mapperA, mapperB, initV, typeFunc) {
-      return function (sum, element) {
-        if(sum[mapperA(element)] === undefined)
-        {
-          sum[mapperA(element)] = initV
-        }
-        sum[mapperA(element)] = typeFunc(sum[mapperA(element)], mapperB(element))
-        return sum
-      }
-    }
-
-    const flatMap = (mapper) =>
-      (sum, element) =>
-        [...sum,...mapper(element)]
-
-    module.exports = {
-      customer,
-      order,
-      item,
-      grossPerItemInState
-    }
-
-
-//original code
+//original class code
       // function grossPerItemInSate (state, startTime, endTime, customers) {
       //   return customers
       //     .filter(customer => customer.state === state)
