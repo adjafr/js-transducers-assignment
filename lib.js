@@ -32,7 +32,162 @@ function grossPerItemInState(state, startTime, endTime, customers) {
         .forEach((items) => {if(itemNames[items.name] === undefined){
           itemNames[items.name] = 0}itemNames[items.name]+=items.price
         })})})
-        
+
+        return { itemNames
+          // wizz: 600
+          // bang: 300
+
+
+        }
+      }
+
+//reduce method returns some and next and executes that on a series of
+
+//.reduce(Sum, next)=>[...sum, ...next] // the original code
+//.reduce(Function(order, element) {return[...orders,...mapper(element)]}) stick return function into the original
+//.reduce(Function(order,element){return{...orders, ...(customers)Customer.orders),[]) map apart being put into the flatmap being put into the orignial
+//}})
+//Passing a function of a function that returns it into a function
+
+      // function flatMap (mapper) { //flatMap takes a function and then returns a function and then reduce uses that function to return an array (flattens the array)
+      //   return function (orders, element) {
+      //     return [...orders, ...mapper(element)]
+      //   }
+      // }
+//Original Code
+// const mapCombine =
+//   combiner =>
+//     mapper =>
+//       (sum, element) =>
+//         combiner(sum, mapper(element))
+//
+// const flatMap = mapCombine((arr1, arr2) => [...arr1, ...arr2])
+//   //mapper => (sum, element) => [...sum, ...mapper(element)]
+//   const objFlat = mapCombine((obj1, obj2) => {
+//
+//
+// const customerFlat = // flatMap(customer => customer.orders)
+//   (arr, elem) => [...arr, ...elem.orders]
+//
+//   const orderFlat = // flatMap(customer => customer.orders)
+//     (arr, elem) => [...arr, ...elem.items]
+
+//everything after flatMap gets returned to flatMap
+
+
+
+
+
+
+
+
+// const namePrice = mapCombine((arr1, arr2) => [...item.name,...item.price])
+// mapper => (sum, customer.item.name) => [...sum,...mapper(price)]
+// const endFlat = mapCombine(name, price) =>
+//
+// const employeeCombiner = mapCombine((arr1, arr2)) => [...arr1,...arr2])
+//   mapper => (sum, employee.manager.name) => [sum,...mapper(managerName)]
+//   const employeeFlat = mapCombine((employee, managerName) =>{)}
+//   {
+//
+// const nameFlat = flatMap(item => item.name)
+//   (arr, name) => [...arr, ...item.name]
+//
+// const priceFlat = flatMap(item => item.price)
+//   (arr, price) => [...arr, ...item.price]
+//   }
+
+
+function grossPerItemInSate (state, startTime, endTime, customers) {
+
+  return customers
+    .filter( custom => custom.state === state)
+    .reduce( flatMap(customer => customer.orders), [])
+    .filter( custom => custom.timeStamp >= startTime && custom.timeStamp <= entTime)
+    .reduce( flatMap(order => order.items), [])
+    .reduce( groupBy( item => item.name , item => item.price, 0 , (mapperAElement, mapperBElement) => mapperAElement + mapperBElement),{})
+}
+    // const function itemName(item) {
+    //   return item.name
+    //}
+
+    function groupBy(mapperA, mapperB, initV, typeFunc) {
+      return function (sum, element) {
+        if(sum[mapperA(element)] === undefined)
+        {
+          sum[mapperA(element)] = initV
+        }
+        sum[mapperA(element)] = typeFunc(sum[mapperA(element)], mapperB(element))
+        return sum
+      }
+    }
+
+    const flatMap = (mapper) =>
+      (sum, element) =>
+        [...sum,...mapper(element)]
+
+    module.exports = {
+      customer,
+      order,
+      item,
+      grossPerItemInState
+    }
+
+
+//original code
+      // function grossPerItemInSate (state, startTime, endTime, customers) {
+      //   return customers
+      //     .filter(customer => customer.state === state)
+      //     .reduce(mapCombine((arr1, arr2) => [...arr1,...arr2])(customer => customer.orders),
+      //     .filter(order => startTime <= order.timeStamp && order.timeStamp <= endTime)
+      //     .reduce(flatMap(orderFlat), [])
+      //     .reduce(
+      //       (gross, item) => {
+      //         if (gross[item.name] === undefined) {
+      //           gross[item.name] = 0
+      //         }
+      //         gross[item.name] += item.price
+      //         return gross
+      //     },
+      //     {}
+      //   )
+
+  //      elem.items //return elem.items or (elem) =>
+    //  }
+
+    // function grossPerItemInSate (state, startTime, endTime, customers) {
+    //   return customers
+    //     .filter(customer => customer.state === state)
+    //     .reduce((flatMap(customer => customer.orders), [])
+    //     .filter(order => startTime <= order.timeStamp && order.timeStamp <= endTime)
+    //     .reduce(flatMap(order => order.items), [])
+    //     .reduce(
+    //       (gross, item) => {
+    //         if (gross[item.name] === undefined) {
+    //           gross[item.name] = 0
+    //         }
+    //         gross[item.name] += item.price
+    //         return gross
+    //     },
+    //     {}
+    //   )
+
+      // const mapReduceArrays =
+      //   (mapper, customers) =>
+      //     array
+      //       .map(mapper)
+      //       .reduce((sum, next) => [...sum, ...next], [])
+
+
+
+
+        // module.exports = {
+        //   customer,
+        //   order,
+        //   item,
+        //   grossPerItemInState
+        // }
+
 
         // customers.filter((customer) => {return(customer.state === state)})
         //     .forEach((customer) => {customer.orders
@@ -58,19 +213,3 @@ function grossPerItemInState(state, startTime, endTime, customers) {
     // if (timeStamp > startTime && timeStamp < endTime) {
     //   customers.reduce((sum, price) => {next, ...sum}, [])
     // }
-
-
-  return { itemNames
-    // wizz: 600
-    // bang: 300
-  }
-}
-
-
-
-module.exports = {
-  customer,
-  order,
-  item,
-  grossPerItemInState
-}
